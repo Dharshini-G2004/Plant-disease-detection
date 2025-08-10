@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant Disease Detection</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 20px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  h1 {
+    color: #2e7d32;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .upload-box {
+    border: 2px dashed #4caf50;
+    border-radius: 15px;
+    padding: 1rem;
+    background: #f1f8e9;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .upload-box:hover {
+    background: #dcedc8;
+  }
+
+  .upload-box input {
+    display: none;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-top: 1rem;
+  }
+
+  .result {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #e8f5e9;
+    border-radius: 10px;
+    display: none;
+  }
+
+  .btn {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background: #388e3c;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🌿 Plant Disease Detection</h1>
+
+  <label class="upload-box" id="dropArea">
+    <input type="file" id="imageUpload" accept="image/*">
+    <p>Click or Drag & Drop plant leaf image here</p>
+  </label>
+
+  <img id="previewImage" src="" alt="" style="display:none;">
+
+  <button class="btn" id="detectBtn">Detect Disease</button>
+
+  <div class="result" id="resultBox">
+    <h3>Prediction Result:</h3>
+    <p id="resultText">Processing...</p>
+  </div>
+</div>
+
+<script>
+  const imageUpload = document.getElementById('imageUpload');
+  const previewImage = document.getElementById('previewImage');
+  const dropArea = document.getElementById('dropArea');
+  const detectBtn = document.getElementById('detectBtn');
+  const resultBox = document.getElementById('resultBox');
+  const resultText = document.getElementById('resultText');
+
+  // Image preview
+  imageUpload.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImage.src = e.target.result;
+        previewImage.style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Drag & drop support
+  dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#dcedc8';
+  });
+
+  dropArea.addEventListener('dragleave', () => {
+    dropArea.style.background = '#f1f8e9';
+  });
+
+  dropArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#f1f8e9';
+    const file = e.dataTransfer.files[0];
+    imageUpload.files = e.dataTransfer.files;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImage.src = e.target.result;
+      previewImage.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  });
+
+  // Detect button (mock API call)
+  detectBtn.addEventListener('click', () => {
+    if (!previewImage.src) {
+      alert("Please upload an image first!");
+      return;
+    }
+
+    resultBox.style.display = 'block';
+    resultText.textContent = "Detecting...";
+
+    // Simulated backend response
+    setTimeout(() => {
+      resultText.textContent = "Leaf Blight Detected - Suggested Treatment: Use Copper Fungicide";
+    }, 1500);
+  });
+</script>
+
+</body>
+</html>
